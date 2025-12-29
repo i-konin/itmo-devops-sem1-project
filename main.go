@@ -14,20 +14,14 @@ func main() {
 	dbUser := os.Getenv("POSTGRES_USER")
 	dbPass := os.Getenv("POSTGRES_PASSWORD")
 	dbName := os.Getenv("POSTGRES_DB")
-	dbPort := os.Getenv("POSTGRES_PORT")
 
 	if dbHost == "" || dbUser == "" || dbPass == "" || dbName == "" || dbPort == ""{
 		log.Fatal("Error: Environment variables POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT must be set")
 	}
 
-	port, err := strconv.Atoi(dbPort)
-	if err != nil {
-		log.Fatalf("Invalid DB_PORT value: %s", dbPort)
-	}
-
 	cfg := db.PGConfig{
 		Host:     dbHost,
-		Port:     port,   
+		Port:     5432,   
 		User:     dbUser,
 		Password: dbPass,
 		DBName:   dbName,
