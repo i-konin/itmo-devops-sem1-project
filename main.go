@@ -19,10 +19,6 @@ func main() {
 		log.Fatal("Error: Environment variables POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, must be set")
 	}
 
-	if dbHost == "localhost" {
-		dbHost = "127.0.0.1"
-	}
-
 	cfg := db.PGConfig{
 		Host:     dbHost,
 		Port:     5432,   

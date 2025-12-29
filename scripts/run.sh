@@ -4,11 +4,14 @@ if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
 fi
 
-nohup go run main.go > app.log 2>&1 &
+go build -o server main.go
+
+echo "---> Запуск бинарного файла..."
+nohup ./server > app.log 2>&1 &
 PID=$!
 
 echo "Сервер запущен (PID: $PID)."
-sleep 5
+sleep 10
 
 if kill -0 $PID 2>/dev/null; then
     echo "Приложение работает."
