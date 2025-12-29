@@ -20,9 +20,14 @@ func main() {
 		log.Fatal("Error: Environment variables POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT must be set")
 	}
 
+	port, err := strconv.Atoi(dbPort)
+	if err != nil {
+		log.Fatalf("Invalid DB_PORT value: %s", dbPort)
+	}
+
 	cfg := db.PGConfig{
 		Host:     dbHost,
-		Port:     dbPort,   
+		Port:     port,   
 		User:     dbUser,
 		Password: dbPass,
 		DBName:   dbName,

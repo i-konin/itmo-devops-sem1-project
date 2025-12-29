@@ -45,6 +45,12 @@ jobs:
 
     - name: Prepare environment
       run: ./scripts/prepare.sh
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        POSTGRES_DB: project-sem-1
+        POSTGRES_USER: validator
+        POSTGRES_PASSWORD: val1dat0r
 
     - name: Run application
       run: ./scripts/run.sh
