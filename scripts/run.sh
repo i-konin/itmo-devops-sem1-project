@@ -12,7 +12,8 @@ sleep 5
 
 if kill -0 $PID 2>/dev/null; then
     echo "Приложение работает."
-    head -n 5 app.log
+    echo "=== Tailing logs (first 20 lines) ==="
+    head -n 20 app.log
 else
     echo "Ошибка запуска приложения!"
     cat app.log

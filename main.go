@@ -16,7 +16,7 @@ func main() {
 	dbName := os.Getenv("POSTGRES_DB")
 
 	if dbHost == "" || dbUser == "" || dbPass == "" || dbName == ""{
-		log.Fatal("Error: Environment variables POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT must be set")
+		log.Fatal("Error: Environment variables POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, must be set")
 	}
 
 	cfg := db.PGConfig{
