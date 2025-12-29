@@ -27,11 +27,12 @@ func NewRouter(pg *db.PG) *http.ServeMux {
 }
 
 func (api *Router) HandlePrices(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
+	switch r.Method {
+	case http.MethodPost:
 		api.uploadPrices(w, r)
-	} else if r.Method == http.MethodGet {
+	case http.MethodGet:
 		api.getPrices(w, r)
-	} else {
+	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
@@ -78,7 +79,7 @@ func (api *Router) uploadPrices(w http.ResponseWriter, r *http.Request) {
 
 	reader := csv.NewReader(rc)
 	if _, err := reader.Read(); err != nil {
-		api.sendStats(w, 0)
+		api.sendJSON(w, 0, 0, 0)
 		return
 	}
 
@@ -114,23 +115,20 @@ func (api *Router) uploadPrices(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	insertedCount, err := db.InsertPrices(api.DB, prices)
+	insertedCount, totalCat, totalPrice, err := db.InsertPrices(api.DB, prices)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("DB Insert error: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	api.sendStats(w, insertedCount)
+	api.sendJSON(w, insertedCount, totalCat, totalPrice)
 }
 
-func (api *Router) sendStats(w http.ResponseWriter, insertedCount int) {
-	totalCat, _ := db.SelectTotalCategories(api.DB)
-	totalPrice, _ := db.SelectTotalPrice(api.DB)
-
+func (api *Router) sendJSON(w http.ResponseWriter, items, cats int, price float64) {
 	resp := map[string]interface{}{
-		"total_items":      insertedCount,
-		"total_categories": totalCat,
-		"total_price":      totalPrice,
+		"total_items":      items,
+		"total_categories": cats,
+		"total_price":      price,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
